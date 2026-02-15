@@ -1,8 +1,15 @@
 #include <angle.h>
+#include <utils/logger/log.h>
 
 class MyApp : public angle::App {
+private:
+	clog::Log log;
+
 public:
-	MyApp() {}
+	MyApp() {
+		log.info("Hello world!");
+	}
+
 	~MyApp() {}
 };
 

@@ -14,7 +14,8 @@ namespace angle {
 		void run();
 	};
 
-	App* API create_app();
+
+	App* create_app();
 }
 
 #endif // !__APP_H__

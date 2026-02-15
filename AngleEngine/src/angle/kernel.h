@@ -22,7 +22,7 @@
 	Defines the entry point of the program
 	@param class_name - The name of the entry point class
 */
-#  define set_entry_point_class(class_name) angle::App* API angle::create_app() { return new class_name(); }
+#  define set_entry_point_class(class_name) angle::App* angle::create_app() { return new class_name(); }
 
 # endif
 

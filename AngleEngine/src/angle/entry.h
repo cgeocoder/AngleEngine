@@ -8,6 +8,7 @@
 extern angle::App* angle::create_app();
 
 int main() {
+
 	angle::App* app = angle::create_app();
 	app->run();
 	delete app;
