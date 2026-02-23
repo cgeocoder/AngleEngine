@@ -1,5 +1,6 @@
 #include <angle.h>
 #include <utils/logger/log.h>
+#include <angle/event.h>
 
 class MyApp : public angle::App {
 private:
