@@ -7,90 +7,88 @@
 #include <vector>
 #include "errors.h"
 
-struct VBElem {
+// Структура конфигурации для glVertexAttribPointer 
+// (см. "docs.gl/gl4/glVertexAttribPointer")
+struct VertexBufferAttrib {
 	unsigned int type;
 	unsigned int count;
 	bool norm;
+
+	unsigned int type_size;
 };
 
-class VertexBufferLayout {
+// Класс конфигурации VAO
+class VertexArrayConfig {
 private:
-	std::vector<VBElem> m_Elem;
+	// Массив концигураций для разных VBO
+	std::vector<VertexBufferAttrib> m_VertexBufferAttribs;
+
+	// Шаг, зависящий от параметров и количетва VBO
 	unsigned int m_Stride;
 
 public:
-	inline VertexBufferLayout() : m_Stride{ 0 } {};
+	VertexArrayConfig();
 
+	// Добавляет конфигурацию для glVertexAttribPointer 
+	// (см. "docs.gl/gl4/glVertexAttribPointer")
+	// @param typename _Ty	- Тип данных VBO
+	// @param _Count		- Количество значений типа _Ty на одну вершину
 	template<typename _Ty>
-	inline void push(unsigned int _Count) { static_assert(false); }
+	inline void add_config(unsigned int _Count) { 
+		static_assert(false, "There is no method implementation for this type");
+	}
 
 	template<>
-	inline void push<float>(unsigned int _Count) {
-		m_Elem.push_back({ GL_FLOAT, _Count, false });
-		m_Stride += sizeof(GLfloat) * _Count;
+	void add_config<float>(unsigned int _Count);
+
+	template<>
+	void add_config<double>(unsigned int _Count);
+
+	template<>
+	void add_config<char>(unsigned int _Count);
+
+	template<>
+	void add_config<unsigned char>(unsigned int _Count);
+
+	template<>
+	void add_config<short>(unsigned int _Count);
+
+	template<>
+	void add_config<unsigned short>(unsigned int _Count);
+
+	template<>
+	void add_config<int>(unsigned int _Count);
+
+	template<>
+	void add_config<unsigned int>(unsigned int _Count);
+
+	// Возвращает std::vector аттрибутов добавленных VBO
+	inline const std::vector<VertexBufferAttrib>& get_attribs(void) const {
+		return m_VertexBufferAttribs;
 	}
 
-	inline const std::vector<VBElem>& get_elements(void) const {
-		return m_Elem;
-	}
-
+	// Возвращает шаг
 	inline const unsigned int get_stride(void) const {
 		return m_Stride;
 	}
 };
 
+// Класс конфигурации VBO
 class VertexArray {
 private:
 	unsigned int m_ID;
 
 public:
-	inline VertexArray() {
-		glGenVertexArrays(1, &m_ID);
-		glBindVertexArray(m_ID);
-	}
+	VertexArray();
+	~VertexArray();
 
-	inline ~VertexArray() {
-		glDeleteVertexArrays(1, &m_ID);
-	}
+	void bind(void) const;
+	void unbind(void) const;
 
-	inline void bind(void) const {
-		glBindVertexArray(m_ID);
-	}
-
-	inline void unbind(void) const {
-		glBindVertexArray(0);
-	}
-
-	inline void attach_buffer(
-		const VertexBuffer& _VB,
-		const VertexBufferLayout& _VBL
-	) {
-		_VB.bind();
-
-		const auto& elems = _VBL.get_elements();
-
-		for (size_t i = 0, offset = 0; i < elems.size(); ++i) {
-			const auto& elem = elems.at(i);
-
-			// Включает спецификацию под номером 0
-			// Привязывается к текущему VertexBuffer
-			GL(glEnableVertexAttribArray(i));
-
-			// Изменяет спецификацию под номером 0
-			// Arg2: Количество компонентов вершины
-			// Arg3: Тип компонентов
-			// Arg4: Нормализайия компонентов (?)
-			// Arg5: Шаг - через сколько байт идет следущая вершина
-			// Arg6: Определяет смещение первого компонента
-			GL(glVertexAttribPointer(
-				i, elem.count, elem.type, 
-				elem.norm, _VBL.get_stride(), (void*)offset
-			));
-
-			offset += elem.count * 4; // * type size
-		}
-
-	}
+	// Свяывает VBO с VertexArrayConfig
+	// @param _VertexBuffer		- VBO
+	// @param _VertexArrayConf	- VertexArrayConfig
+	void attach_buffer(const VertexBuffer& _VertexBuffer,const VertexArrayConfig& _VertexArrayConf);
 };
 
 #endif // !__VERTEX_ARRAY_H__

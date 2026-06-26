@@ -3,6 +3,7 @@
 #ifndef __VERTEX_BUFFER_H__
 #define __VERTEX_BUFFER_H__
 
+// Класс VertexBuffer
 class VertexBuffer {
 private:
 	unsigned int m_ID;
