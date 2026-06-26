@@ -7,8 +7,8 @@
 #include <vector>
 #include "errors.h"
 
-// Структура конфигурации для glVertexAttribPointer 
-// (см. "docs.gl/gl4/glVertexAttribPointer")
+// РЎС‚СЂСѓРєС‚СѓСЂР° РєРѕРЅС„РёРіСѓСЂР°С†РёРё РґР»СЏ glVertexAttribPointer 
+// (СЃРј. "docs.gl/gl4/glVertexAttribPointer")
 struct VertexBufferAttrib {
 	unsigned int type;
 	unsigned int count;
@@ -17,22 +17,22 @@ struct VertexBufferAttrib {
 	unsigned int type_size;
 };
 
-// Класс конфигурации VAO
+// РљР»Р°СЃСЃ РєРѕРЅС„РёРіСѓСЂР°С†РёРё VAO
 class VertexArrayConfig {
 private:
-	// Массив концигураций для разных VBO
+	// РњР°СЃСЃРёРІ РєРѕРЅС†РёРіСѓСЂР°С†РёР№ РґР»СЏ СЂР°Р·РЅС‹С… VBO
 	std::vector<VertexBufferAttrib> m_VertexBufferAttribs;
 
-	// Шаг, зависящий от параметров и количетва VBO
+	// РЁР°Рі, Р·Р°РІРёСЃСЏС‰РёР№ РѕС‚ РїР°СЂР°РјРµС‚СЂРѕРІ Рё РєРѕР»РёС‡РµС‚РІР° VBO
 	unsigned int m_Stride;
 
 public:
 	VertexArrayConfig();
 
-	// Добавляет конфигурацию для glVertexAttribPointer 
-	// (см. "docs.gl/gl4/glVertexAttribPointer")
-	// @param typename _Ty	- Тип данных VBO
-	// @param _Count		- Количество значений типа _Ty на одну вершину
+	// Р”РѕР±Р°РІР»СЏРµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёСЋ РґР»СЏ glVertexAttribPointer 
+	// (СЃРј. "docs.gl/gl4/glVertexAttribPointer")
+	// @param typename _Ty	- РўРёРї РґР°РЅРЅС‹С… VBO
+	// @param _Count		- РљРѕР»РёС‡РµСЃС‚РІРѕ Р·РЅР°С‡РµРЅРёР№ С‚РёРїР° _Ty РЅР° РѕРґРЅСѓ РІРµСЂС€РёРЅСѓ
 	template<typename _Ty>
 	inline void add_config(unsigned int _Count) { 
 		static_assert(false, "There is no method implementation for this type");
@@ -62,18 +62,18 @@ public:
 	template<>
 	void add_config<unsigned int>(unsigned int _Count);
 
-	// Возвращает std::vector аттрибутов добавленных VBO
+	// Р’РѕР·РІСЂР°С‰Р°РµС‚ std::vector Р°С‚С‚СЂРёР±СѓС‚РѕРІ РґРѕР±Р°РІР»РµРЅРЅС‹С… VBO
 	inline const std::vector<VertexBufferAttrib>& get_attribs(void) const {
 		return m_VertexBufferAttribs;
 	}
 
-	// Возвращает шаг
+	// Р’РѕР·РІСЂР°С‰Р°РµС‚ С€Р°Рі
 	inline const unsigned int get_stride(void) const {
 		return m_Stride;
 	}
 };
 
-// Класс конфигурации VBO
+// РљР»Р°СЃСЃ РєРѕРЅС„РёРіСѓСЂР°С†РёРё VBO
 class VertexArray {
 private:
 	unsigned int m_ID;
@@ -85,7 +85,7 @@ public:
 	void bind(void) const;
 	void unbind(void) const;
 
-	// Свяывает VBO с VertexArrayConfig
+	// РЎРІСЏС‹РІР°РµС‚ VBO СЃ VertexArrayConfig
 	// @param _VertexBuffer		- VBO
 	// @param _VertexArrayConf	- VertexArrayConfig
 	void attach_buffer(const VertexBuffer& _VertexBuffer,const VertexArrayConfig& _VertexArrayConf);
