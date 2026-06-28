@@ -2,6 +2,10 @@
 
 UniformLocation::UniformLocation(const Shader& _Shader, const std::string& _Name) {
     GL(m_Location = glGetUniformLocation(_Shader.m_ProgramID, _Name.c_str()));
+
+    if (m_Location == -1) {
+        __debugbreak();
+    }
 }
 
 template<>

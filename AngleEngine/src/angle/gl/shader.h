@@ -137,12 +137,13 @@ class API Shader;
 
 class API UniformLocation {
 private:
-    unsigned int m_Location;
+    int m_Location;
 
 public:
     UniformLocation(const Shader& _Shader, const std::string& _Name);
+    inline UniformLocation() : m_Location{ -1 } {};
 
-    inline unsigned int get(void) const {
+    inline int get(void) const {
         return m_Location;
     }
 };
@@ -199,6 +200,22 @@ public:
     // Uniform: 4 float
     inline void __fastcall u4f(const UniformLocation& _Location, float _X, float _Y, float _Z, float _W) {
         GL(glUniform4f(_Location.get(), _X, _Y, _Z, _W));
+    }
+
+    inline void __fastcall u1i(const UniformLocation& _Location, int _X) {
+        GL(glUniform1i(_Location.get(), _X));
+    }
+
+    inline void __fastcall u2i(const UniformLocation& _Location, int _X, int _Y) {
+        GL(glUniform2i(_Location.get(), _X, _Y));
+    }
+
+    inline void __fastcall u3i(const UniformLocation& _Location, int _X, int _Y, int _Z) {
+        GL(glUniform3i(_Location.get(), _X, _Y, _Z));
+    }
+
+    inline void __fastcall u4i(const UniformLocation& _Location, int _X, int _Y, int _Z, int _W) {
+        GL(glUniform4i(_Location.get(), _X, _Y, _Z, _W));
     }
 
     inline void bind(void) const { GL(glUseProgram(m_ProgramID)); }

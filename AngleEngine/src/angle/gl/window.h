@@ -3,9 +3,12 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
+#include <string>
 #include "opengl.h"
 #include "vertex_array.h"
 #include "index_buffer.h"
+#include "../../utils/stb_image/stb_image.h"
+#include "errors.h"
 #include "shader.h"
 
 template<typename _Ty>

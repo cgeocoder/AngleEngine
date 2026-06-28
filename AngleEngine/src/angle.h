@@ -14,7 +14,7 @@
 #include "angle/gl/errors.h"
 #include "angle/gl/filesystem.h"
 #include "angle/gl/shader.h"
-/* #include "angle/gl/texture.h" */
+#include "angle/gl/texture2d.h"
 #include "angle/gl/index_buffer.h"
 #include "angle/gl/vertex_buffer.h"
 #include "angle/gl/vertex_array.h"

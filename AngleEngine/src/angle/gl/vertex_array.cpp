@@ -17,7 +17,7 @@ void VertexArrayConfig::add_config<double>(unsigned int _Count) {
 
 template<>
 void VertexArrayConfig::add_config<char>(unsigned int _Count) {
-	m_VertexBufferAttribs.push_back({ GL_BYTE, _Count, false, sizeof(char) });
+	m_VertexBufferAttribs.push_back({ GL_BYTE, _Count, true, sizeof(char) });
 	m_Stride += sizeof(char) * _Count;
 }
 
@@ -29,50 +29,51 @@ void VertexArrayConfig::add_config<unsigned char>(unsigned int _Count) {
 
 template<>
 void VertexArrayConfig::add_config<short>(unsigned int _Count) {
-	m_VertexBufferAttribs.push_back({ GL_SHORT, _Count, false, sizeof(short) });
+	m_VertexBufferAttribs.push_back({ GL_SHORT, _Count, true, sizeof(short) });
 	m_Stride += sizeof(short) * _Count;
 }
 
 template<>
 void VertexArrayConfig::add_config<unsigned short>(unsigned int _Count) {
-	m_VertexBufferAttribs.push_back({ GL_UNSIGNED_SHORT, _Count, false, sizeof(unsigned short) });
+	m_VertexBufferAttribs.push_back({ GL_UNSIGNED_SHORT, _Count, true, sizeof(unsigned short) });
 	m_Stride += sizeof(unsigned short) * _Count;
 }
 
 template<>
 void VertexArrayConfig::add_config<int>(unsigned int _Count) {
-	m_VertexBufferAttribs.push_back({ GL_INT, _Count, false, sizeof(int) });
+	m_VertexBufferAttribs.push_back({ GL_INT, _Count, true, sizeof(int) });
 	m_Stride += sizeof(int) * _Count;
 }
 
 template<>
 void VertexArrayConfig::add_config<unsigned int>(unsigned int _Count) {
-	m_VertexBufferAttribs.push_back({ GL_UNSIGNED_INT, _Count, false, sizeof(unsigned int) });
+	m_VertexBufferAttribs.push_back({ GL_UNSIGNED_INT, _Count, true, sizeof(unsigned int) });
 	m_Stride += sizeof(unsigned int) * _Count;
 }
 
 
 VertexArray::VertexArray() {
-	glGenVertexArrays(1, &m_ID);
-	glBindVertexArray(m_ID);
+	GL(glGenVertexArrays(1, &m_ID));
+	GL(glBindVertexArray(m_ID));
 }
 
 VertexArray::~VertexArray() {
-	glDeleteVertexArrays(1, &m_ID);
+	GL(glDeleteVertexArrays(1, &m_ID));
 }
 
 void VertexArray::bind(void) const {
-	glBindVertexArray(m_ID);
+	GL(glBindVertexArray(m_ID));
 }
 
 void VertexArray::unbind(void) const {
-	glBindVertexArray(0);
+	GL(glBindVertexArray(0));
 }
 
 void VertexArray::attach_buffer(
 	const VertexBuffer& _VertexBuffer,
 	const VertexArrayConfig& _VertexArrayConf
 ) {
+	bind();
 	_VertexBuffer.bind();
 
 	const auto& elems = _VertexArrayConf.get_attribs();
@@ -91,8 +92,12 @@ void VertexArray::attach_buffer(
 		// 5: Шаг - через сколько байт идет следущая вершина
 		// 6: Определяет смещение первого компонента
 		GL(glVertexAttribPointer(
-			i, elem.count, elem.type,
-			elem.norm, _VertexArrayConf.get_stride(), (void*)offset
+			i, 
+			elem.count, 
+			elem.type,
+			elem.norm, 
+			_VertexArrayConf.get_stride(), 
+			(void*)offset
 		));
 
 		offset += (size_t)elem.count * elem.type_size;

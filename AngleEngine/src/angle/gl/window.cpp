@@ -9,6 +9,19 @@ Window::Window(const Vec2i& size, const std::string& title) : m_Size{ size } {
         __debugbreak();
     }
 
+    GLFWimage window_icon;
+    int bpp;
+    window_icon.pixels = stbi_load("..\\AngleEngine\\res\\logo\\logo_icon_window.png", 
+        &window_icon.width, &window_icon.height, &bpp, 4);
+
+    if (window_icon.pixels) {
+        glfwSetWindowIcon(m_Window, 1, &window_icon);
+        stbi_image_free(window_icon.pixels);
+    }
+    else {
+        __debugbreak();
+    }
+
     glfwMakeContextCurrent(m_Window);
 }
 
